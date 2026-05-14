@@ -117,6 +117,7 @@ sequenceDiagram
 | `SHOP_JPA_DDL_AUTO` | JPA schema 策略，默认 `update` |
 | `SHOP_JPA_SHOW_SQL` | 是否输出 SQL，默认 `true` |
 | `SHOP_ASSET_BASE_URL` | 商品图片等静态资源基础地址 |
+| `SHOP_LOG_PATH` | 日志输出目录，默认 `logs`，相对于启动目录 |
 | `SERVER_PORT` | 服务端口，默认 `9800` |
 | `ALIPAY_APP_ID` | 支付宝沙箱应用 ID |
 | `ALIPAY_APP_PRIVATE_KEY` | 支付宝沙箱应用私钥 |

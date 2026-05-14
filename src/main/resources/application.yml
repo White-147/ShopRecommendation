@@ -15,6 +15,10 @@ spring:
 nginx:
   path: ${SHOP_ASSET_BASE_URL:http://localhost:8888/shop/}
 
+shop:
+  log:
+    path: ${SHOP_LOG_PATH:logs}
+
 
 logging:
   config: classpath:logback-spring.xml

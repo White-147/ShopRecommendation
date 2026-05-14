@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <springProperty scope="context" name="SHOP_LOG_PATH" source="shop.log.path" defaultValue="logs"/>
 
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -13,7 +14,7 @@
     <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>D:\code\Java\shop\src\main\resources\log\%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${SHOP_LOG_PATH}/%d{yyyy-MM-dd}.log</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
