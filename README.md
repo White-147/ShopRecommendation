@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="./src/main/resources/static/images/logo.png" alt="ShopRecommendation logo" width="170">
-</p>
-
 <h1 align="center">ShopRecommendation</h1>
 
 <p align="center">Java Web 电商推荐系统，覆盖商品浏览、分类检索、收藏、购物车、订单结算、支付沙箱和推荐商品展示。</p>

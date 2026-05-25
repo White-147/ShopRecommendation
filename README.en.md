@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="./src/main/resources/static/images/logo.png" alt="ShopRecommendation logo" width="170">
-</p>
-
 <h1 align="center">ShopRecommendation</h1>
 
 <p align="center">A Java Web e-commerce recommendation system covering product browsing, category search, favorites, cart, orders, Alipay sandbox flow, and recommended products.</p>
