@@ -1,4 +1,25 @@
-# ShopRecommendation
+<p align="center">
+  <img src="./src/main/resources/static/images/logo.png" alt="ShopRecommendation logo" width="170">
+</p>
+
+<h1 align="center">ShopRecommendation</h1>
+
+<p align="center">Java Web 电商推荐系统，覆盖商品浏览、分类检索、收藏、购物车、订单结算、支付沙箱和推荐商品展示。</p>
+
+<p align="center">
+  <a href="./README.md">简体中文</a> | <a href="./README.en.md">English</a>
+</p>
+
+<p align="center">
+  <img alt="Status" src="https://img.shields.io/badge/status-portfolio-7952B3?style=for-the-badge">
+  <img alt="Stack" src="https://img.shields.io/badge/stack-Spring%20Boot%20%2B%20Thymeleaf%20%2B%20JPA-2E7D32?style=for-the-badge">
+  <img alt="Screenshot" src="https://img.shields.io/badge/screenshot-static%20template-F59E0B?style=for-the-badge">
+  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-blue?style=for-the-badge"></a>
+</p>
+
+<p align="center">
+  <img src="./docs/assets/screenshots/static-template-preview.png" alt="ShopRecommendation 静态页面模板预览截图" width="900">
+</p>
 
 电商推荐系统，Java Web 课程阶段项目。项目以在线商城业务场景为背景，围绕用户、商品、分类、收藏、购物车、收货地址、订单结算和推荐商品展示，构建了一个基于 Spring Boot + Thymeleaf + JPA 的完整商城业务流程。
 
