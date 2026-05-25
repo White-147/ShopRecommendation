@@ -79,6 +79,21 @@ a {
     display: inline-block;
 }
 
+.site-name {
+    display: inline-block;
+    color: var(--color);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 60px;
+    text-decoration: none;
+}
+
+.site-name:hover,
+.site-name:focus {
+    color: var(--color);
+    text-decoration: none;
+}
+
 .head .search {
     padding: 10px 20px;
 }
@@ -523,6 +538,12 @@ a {
     height: 80px;
     margin: 10px 100px;
     display: inline;
+}
+
+.login_top .login-brand {
+    margin: 10px 100px;
+    line-height: 80px;
+    vertical-align: top;
 }
 
 .login_tip {
