@@ -41,10 +41,10 @@ MERGE INTO t_banner (id, title, href, image_path, active, seq) KEY(id) VALUES
   (1, '春季数码焕新季', '#', 'banner02.jpg', 1, 1);
 
 
+-- 演示账号：demo / 123456（必须先于 t_shipping_address 灌入，避免外键约束失败）
+MERGE INTO t_user (id, gender, real_name, login_name, password_md5, phone, e_mail, address, birth, is_lock) KEY(id) VALUES
+  (1, '男', '演示用户', 'demo', 'e10adc3949ba59abbe56e057f20f883e', '13800000000', 'demo@example.com', '江苏省盐城市', '2000-01-01', 0);
+
 -- 演示收货地址（demo 账号默认地址）
 MERGE INTO t_shipping_address (id, name, address, phone_num, default_value, user_id) KEY(id) VALUES
   (1, '蒋宇龙', '江苏省盐城市盐都区示例街道 100 号', '13800000000', 1, 1);
-
--- 演示账号：demo / 123456
-MERGE INTO t_user (id, gender, real_name, login_name, password_md5, phone, e_mail, address, birth, is_lock) KEY(id) VALUES
-  (1, '男', '演示用户', 'demo', 'e10adc3949ba59abbe56e057f20f883e', '13800000000', 'demo@example.com', '江苏省盐城市', '2000-01-01', 0);
