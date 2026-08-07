@@ -21,7 +21,25 @@
 
 当前仓库已经整理为可公开展示版本，包含 Spring Boot 后端、Thymeleaf 页面模板、静态页面资源、JPA 实体与业务分层代码，并对本地数据库地址、数据库密码和支付宝沙箱密钥进行了环境变量化处理。
 
-> 说明：本仓库不包含历史本地数据库数据，也不包含真实或沙箱支付密钥。项目主要用于展示 Java Web 分层设计、商城业务建模、页面交互流程和公开仓库整理方式。若要完整运行演示，需要自行准备 MySQL 数据库和少量商品、分类、用户等测试数据。
+> 说明：本仓库不包含历史本地数据库数据，也不包含真实或沙箱支付密钥。项目已改为**内嵌 H2 数据库**（免安装 MySQL），启动时自动建表并灌入演示数据（14 个商品、6 个分类、首页轮播、演示账号），商品图片内置在 `static/goods`，开箱即用。
+
+## 快速运行
+
+```bash
+# 方式一：直接运行（需 JDK 8）
+./mvnw.cmd spring-boot:run        # Windows
+./mvnw spring-boot:run            # Linux/macOS
+
+# 方式二：打包运行
+./mvnw.cmd package -DskipTests
+java -jar target/ShopRecommendation-*.jar
+```
+
+- 访问：http://localhost:9800/
+- **演示账号：`demo` / `123456`**（也可自行注册）
+- 数据库为内嵌 H2 文件库（`data/shop.mv.db`），删除 `data` 目录后重启即重置演示数据
+- 商品/轮播图片由应用自身提供（`SHOP_ASSET_BASE_URL` 默认指向应用自身），无需额外静态服务器
+- 如需支付宝沙箱支付演示，在 `.env.example` 中配置沙箱密钥后通过环境变量传入
 
 ## 项目功能
 
@@ -42,7 +60,7 @@
 | --- | --- |
 | 后端 | Spring Boot 2.5.0、Spring MVC、Spring Data JPA、Lombok |
 | 页面 | Thymeleaf、HTML、CSS、Bootstrap、jQuery |
-| 数据库 | MySQL、Hibernate/JPA |
+| 数据库 | H2（内嵌）、Hibernate/JPA |
 | 支付 | Alipay SDK、支付宝沙箱 |
 | 接口文档 | Springfox Swagger 2 |
 | 构建工具 | Maven Wrapper |

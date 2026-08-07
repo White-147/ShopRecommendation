@@ -1,10 +1,8 @@
 package com.briup.shop.conf;
 
 import com.briup.shop.web.filter.UserFilter;
-import com.briup.shop.web.listener.ApplicationListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,8 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebAppConfigure implements WebMvcConfigurer {
     @Autowired
     private UserFilter userFilter;
-    @Autowired
-    private ApplicationListener applicationListener;
     @Bean
 
     public FilterRegistrationBean filterRegist() {
@@ -27,12 +23,7 @@ public class WebAppConfigure implements WebMvcConfigurer {
         frBean.addUrlPatterns("/toShopCar","/toOrder","/toShopView","/addShopCar","/toCollect","/advanceOrder","/toViewShop","/createOrder","/payOrder","/paySuccess","/toAddShippingAddress","/addShippingAddress");
         return frBean;
     }
-
-
-    @Bean
-    public ServletListenerRegistrationBean listenerRegist() {
-        ServletListenerRegistrationBean srb = new ServletListenerRegistrationBean();
-        srb.setListener(applicationListener);
-        return srb;
-    }
+    // 说明：首页数据缓存监听器已改为 Spring ApplicationReadyEvent 监听
+    //（com.briup.shop.web.listener.ApplicationListener），不再作为 ServletListener 注册，
+    // 以保证 data.sql 演示数据灌入后再缓存，首页首次启动即有商品数据。
 }

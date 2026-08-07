@@ -1,8 +1,9 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${SHOP_DB_URL:jdbc:mysql://localhost:3306/shop_recommendation?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
-    username: ${SHOP_DB_USERNAME:root}
+    driver-class-name: org.h2.Driver
+    # 内嵌 H2 文件库（data/shop.mv.db），免安装 MySQL；删除 data 目录即可重置
+    url: ${SHOP_DB_URL:jdbc:h2:file:./data/shop;MODE=MySQL}
+    username: ${SHOP_DB_USERNAME:sa}
     password: ${SHOP_DB_PASSWORD:}
 
   jpa:
@@ -12,8 +13,16 @@ spring:
     show-sql: ${SHOP_JPA_SHOW_SQL:true}
     hibernate:
       ddl-auto: ${SHOP_JPA_DDL_AUTO:update}
+    # 先由 Hibernate 建表，再执行 data.sql 灌入演示数据
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
 nginx:
-  path: ${SHOP_ASSET_BASE_URL:http://localhost:8888/shop/}
+  # 静态资源基地址：默认指向应用自身（图片已置于 static/goods、static/banners）
+  path: ${SHOP_ASSET_BASE_URL:http://localhost:9800/}
 
 shop:
   log:
