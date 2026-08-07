@@ -19,6 +19,8 @@ spring:
   sql:
     init:
       mode: always
+      # data.sql 为 UTF-8，必须显式指定，否则中文环境（GBK）下会乱码
+      encoding: utf-8
 
 nginx:
   # 静态资源基地址：默认指向应用自身（图片已置于 static/goods、static/banners）

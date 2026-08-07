@@ -17,6 +17,12 @@ public class AliPayConfig {
 				CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE);
 	}
 
+	/** 是否已配置支付宝沙箱密钥（未配置时走模拟支付，保证演示流程完整可跑） */
+	public static boolean isConfigured() {
+		return APP_ID != null && !APP_ID.trim().isEmpty()
+				&& APP_PRIVATE_KEY != null && !APP_PRIVATE_KEY.trim().isEmpty();
+	}
+
 	private static String config(String name, String defaultValue) {
 		String value = System.getenv(name);
 		return value == null || value.trim().isEmpty() ? defaultValue : value.trim();

@@ -3,6 +3,7 @@ package com.briup.shop.service.impl;
 import com.briup.shop.bean.*;
 import com.briup.shop.dao.IOrderDao;
 import com.briup.shop.dao.IOrderItemDao;
+import com.briup.shop.dao.IShippingAddressDao;
 import com.briup.shop.dao.IShopCarDao;
 import com.briup.shop.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class OrderServiceImpl implements IOrderService {
     private IShopCarDao shopCarDao;
     @Autowired
     private IOrderItemDao itemDao;
+    @Autowired
+    private IShippingAddressDao addressDao;
 
     @Override
     public List<Order> findUserAllOrders(Long userId) {
@@ -35,7 +38,10 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     @Transactional
     public Order saveOrder(Long[] shopCarIds, User user, Long addressId) {
-        ShippingAddress address = new ShippingAddress(addressId);
+        // 必须从数据库加载持久化地址（new ShippingAddress(addressId) 是瞬态实例，
+        // 保存 Order 时 Hibernate 会抛 TransientPropertyValueException 并回滚）
+        ShippingAddress address = addressDao.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("收货地址不存在: " + addressId));
         List<Long> asList = Arrays.asList(shopCarIds);
         List<ShopCar> list = shopCarDao.findAllById(asList);
         Order order = new Order(user, address);
@@ -56,7 +62,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Order paySuccess(String orderId) {
-        Order order = orderDao.getById(orderId);
+        // findById 替代懒加载的 getById，避免“订单不存在”的代理初始化异常
+        Order order = orderDao.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("订单不存在: " + orderId));
         order.setStatus("2");
         orderDao.save(order);
         return order;

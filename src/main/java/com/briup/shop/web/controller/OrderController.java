@@ -118,6 +118,19 @@ public class OrderController {
         //设置参数
         alipayTradePagePayRequest.setBizModel(model);
         //回调地址
+        // 未配置支付宝沙箱密钥时，降级为模拟支付页，保证演示流程完整可跑；
+        // 配置 ALIPAY_APP_ID / ALIPAY_APP_PRIVATE_KEY / ALIPAY_PUBLIC_KEY 后走真实支付宝。
+        if (!AliPayConfig.isConfigured()) {
+            try {
+                response.setContentType("text/html;charset=utf-8");
+                response.getWriter().println(buildMockPayHtml(order));
+                response.getWriter().flush();
+                response.getWriter().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         try {
             alipayTradePagePayRequest.setReturnUrl(path);
             //客户端执行,拿到支付结果
@@ -154,5 +167,24 @@ public class OrderController {
             }
         }
         return sumPrice;
+    }
+
+    /** 未配置支付宝沙箱密钥时的模拟支付页（演示模式） */
+    private String buildMockPayHtml(Order order) {
+        return "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"utf-8\">"
+                + "<title>模拟支付</title>"
+                + "<style>body{font-family:'Microsoft YaHei',sans-serif;background:#f5f6f8;display:flex;justify-content:center;padding-top:60px}"
+                + ".card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:36px 48px;text-align:center;max-width:420px}"
+                + "h2{color:#333;margin-top:0}.amount{color:#e64340;font-size:32px;font-weight:bold;margin:12px 0}"
+                + ".info{color:#888;font-size:13px;margin:6px 0}.btn{display:inline-block;margin-top:20px;background:#1677ff;color:#fff;"
+                + "padding:10px 32px;border-radius:6px;text-decoration:none;font-size:15px}.btn:hover{background:#0958d9}"
+                + ".note{color:#aaa;font-size:12px;margin-top:18px}</style></head><body>"
+                + "<div class=\"card\"><h2>模拟支付（演示模式）</h2>"
+                + "<div class=\"amount\">¥ " + order.getSumPrice() + "</div>"
+                + "<div class=\"info\">订单号：" + order.getId() + "</div>"
+                + "<div class=\"info\">商品：ShopRecommendation 购物订单</div>"
+                + "<a class=\"btn\" href=\"paySuccess?id=" + order.getId() + "\">模拟支付成功</a>"
+                + "<div class=\"note\">未配置支付宝沙箱密钥，当前为演示支付<br>配置 ALIPAY_APP_ID 等环境变量后自动切换为真实支付宝</div>"
+                + "</div></body></html>";
     }
 }
