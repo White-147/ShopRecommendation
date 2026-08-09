@@ -1,5 +1,6 @@
 package com.briup.shop.bean;
 
+import javax.persistence.Column;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class Shop {
     @ApiModelProperty("商品规格")
     private String info;
     @ApiModelProperty("商品信息")
+    @Column(columnDefinition = "TEXT")
     private String intro;
     @ApiModelProperty("商品缩略图")
     private String img;
