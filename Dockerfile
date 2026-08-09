@@ -17,6 +17,8 @@ FROM eclipse-temurin:8-jre-jammy
 WORKDIR /app
 COPY --from=build /app/target/ShopRecommendation-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9800
-ENV JAVA_OPTS="-Xmx512m"
-# HF Spaces 注入 $PORT，未注入时回退本地 9800；商品图片基地址由 SHOP_ASSET_BASE_URL 覆盖（HF Space 设置）
+ENV JAVA_OPTS="-Xmx384m"
+# 在线部署域名（SnapDeploy 生成，写死镜像默认值；平台环境变量存在时仍可覆盖）
+ENV SHOP_ASSET_BASE_URL="https://shop-e1e57.containers.snapdeploy.app/"
+# HF Spaces 注入 $PORT，未注入时回退本地 9800
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar --server.port=${PORT:-9800}"]
