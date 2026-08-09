@@ -19,7 +19,7 @@
 
 ShopRecommendation is a Java Web course-stage project organized as a public portfolio repository. It includes Spring Boot backend code, Thymeleaf page templates, static page assets, JPA entities, and service layering. Local database URLs, database passwords, and Alipay sandbox keys have been converted to environment-based configuration.
 
-The repository does not include the historical local database or real payment keys. A complete runtime demo requires a prepared MySQL database with sample products, categories, users, and orders.
+The repository does not include the historical local database or real payment keys. It now uses an **embedded H2 database** (no MySQL installation needed) — schema and demo data (460 products, 57 categories, homepage banners, demo account) are created automatically on startup, with product images bundled under `static/images/shops`.
 
 ## Features
 
@@ -37,7 +37,7 @@ The repository does not include the historical local database or real payment ke
 | --- | --- |
 | Backend | Spring Boot 2.5.0, Spring MVC, Spring Data JPA, Lombok |
 | Pages | Thymeleaf, HTML, CSS, Bootstrap, jQuery |
-| Database | MySQL, Hibernate / JPA |
+| Database | H2 (embedded, MODE=MySQL), Hibernate / JPA |
 | Payment | Alipay SDK, Alipay sandbox |
 | API docs | Springfox Swagger 2 |
 | Build tools | Maven Wrapper |
@@ -51,7 +51,7 @@ cd D:\code\ShopRecommendation\src\main\resources\static
 python -m http.server 9898
 ```
 
-For full backend execution, create a MySQL database and provide the required environment variables documented in the Chinese README and `.env.example`.
+For full backend execution, just run the app — the embedded H2 database (`data/shop.mv.db`, MODE=MySQL) is created automatically with demo data. To use MySQL instead, create a database and provide the required environment variables documented in the Chinese README and `.env.example`.
 
 ## License and Security
 

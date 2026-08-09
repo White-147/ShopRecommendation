@@ -84,7 +84,7 @@
     <div class="row book">
         <div th:each="shop: ${shopList}" class="col-md-3 onebook">
             <a class="viewShop" th:href="'toViewShop?shopId='+${shop.id}" href="viewShop.html">
-                <img src="images/book_index/book1.jpg" th:src="${application.path}+'goods/'+${shop.img}"/>
+                <img src="images/book_index/book1.jpg" th:src="${application.path}+${shop.img}"/>
                 <h4 th:text="${shop.name}">
                     JAVAEE轻量级框架
                 </h4>

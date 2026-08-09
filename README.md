@@ -21,7 +21,7 @@
 
 当前仓库已经整理为可公开展示版本，包含 Spring Boot 后端、Thymeleaf 页面模板、静态页面资源、JPA 实体与业务分层代码，并对本地数据库地址、数据库密码和支付宝沙箱密钥进行了环境变量化处理。
 
-> 说明：本仓库不包含历史本地数据库数据，也不包含真实或沙箱支付密钥。项目已改为**内嵌 H2 数据库**（免安装 MySQL），启动时自动建表并灌入演示数据（14 个商品、6 个分类、首页轮播、演示账号），商品图片内置在 `static/goods`，开箱即用。
+> 说明：本仓库不包含历史本地数据库数据，也不包含真实或沙箱支付密钥。项目已改为**内嵌 H2 数据库**（免安装 MySQL），启动时自动建表并灌入演示数据（460 个商品、57 个分类、首页轮播、演示账号），商品图片内置在 `static/images/shops`，开箱即用。
 
 ## 快速运行
 
@@ -74,7 +74,7 @@ flowchart LR
     Page --> Controller["Controller\n页面跳转与请求处理"]
     Controller --> Service["Service\n业务逻辑"]
     Service --> Repository["Repository\nSpring Data JPA"]
-    Repository --> MySQL["MySQL\n商城业务库"]
+    Repository --> H2["H2 内嵌库\n(MODE=MySQL)"]
     Controller --> Alipay["Alipay Sandbox\n支付跳转"]
     Listener["ApplicationListener\n分类/轮播/推荐数据加载"] --> Service
 ```
@@ -118,7 +118,7 @@ sequenceDiagram
     participant C as Controller
     participant S as Service
     participant D as Repository
-    participant M as MySQL
+    participant M as H2 内嵌库
     participant A as 支付宝沙箱
 
     U->>P: 浏览 / 搜索商品
@@ -146,7 +146,7 @@ sequenceDiagram
 
 | 变量 | 说明 |
 | --- | --- |
-| `SHOP_DB_URL` | MySQL 连接地址 |
+| `SHOP_DB_URL` | 数据库连接地址，默认 H2 内嵌库 `jdbc:h2:file:./data/shop;MODE=MySQL`；也可改为 MySQL 兼容地址 |
 | `SHOP_DB_USERNAME` | MySQL 用户名 |
 | `SHOP_DB_PASSWORD` | MySQL 密码 |
 | `SHOP_JPA_DDL_AUTO` | JPA schema 策略，默认 `update` |
@@ -162,13 +162,15 @@ sequenceDiagram
 
 ## 部署说明
 
-### 1. 准备数据库
+### 1. 数据库
+
+默认使用**内嵌 H2 文件库**（`data/shop.mv.db`，MODE=MySQL），**无需安装任何数据库**。启动时由 `data.sql` 与 `MysqlDataMigrator` 自动建表并灌入 460 个商品、57 个分类、首页轮播与演示账号，删除 `data` 目录后重启即重置。
+
+如需改用 MySQL，创建数据库后通过环境变量指定连接地址：
 
 ```sql
 CREATE DATABASE shop_recommendation DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
-
-项目当前依赖 JPA `ddl-auto=update` 自动维护表结构。首次运行前，需要准备 MySQL 服务；首次启动后，可根据实体表结构补充商品、分类、轮播图、推荐商品和用户等演示数据。
 
 ### 2. 配置环境变量
 
@@ -219,7 +221,6 @@ http://localhost:9800/
 
 ## 后续可改进方向
 
-- 补充脱敏后的 MySQL 建表 SQL 和少量演示数据。
 - 增加页面截图，展示首页、商品详情、购物车、订单确认和支付流程。
 - 将登录认证升级为更完整的安全方案，例如 Spring Security。
 - 为核心 Service 和 Controller 增加更完整的单元测试或集成测试。
