@@ -18,7 +18,8 @@ WORKDIR /app
 COPY --from=build /app/target/ShopRecommendation-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9800
 ENV JAVA_OPTS="-Xmx384m"
-# 在线部署域名（SnapDeploy 生成，写死镜像默认值；平台环境变量存在时仍可覆盖）
-ENV SHOP_ASSET_BASE_URL="https://shop-e1e57.containers.snapdeploy.app/"
+# 商品图/轮播图基地址：默认空 = 相对路径，图片自动指向部署自身的域名；
+# 平台环境变量存在时仍可覆盖（修复：原默认写死 SnapDeploy 域名导致新部署图片 404）
+ENV SHOP_ASSET_BASE_URL=""
 # HF Spaces 注入 $PORT，未注入时回退本地 9800
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar --server.port=${PORT:-9800}"]
