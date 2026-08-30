@@ -5,6 +5,16 @@
 
 ## 方式一：Hugging Face Spaces（推荐：免费、公开、常驻）
 
+### 0. 一键脚本（推荐）
+
+本仓库提供 `scripts/deploy-hf-spaces.ps1`，自动完成登录、创建 Space、推送代码、配置环境变量：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\deploy-hf-spaces.ps1 -Token hf_xxxxxxxxxxxxxxxxx
+```
+
+执行后等待构建完成即可访问（脚本尾部会打印 Space 域名与演示账号）。以下手动步骤供排查问题或自定义时参考。
+
 ### 1. 准备访问令牌
 
 1. 登录 https://huggingface.co → Settings → Access Tokens → 新建 Fine-grained token（勾选 **Write** 权限）
