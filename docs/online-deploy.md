@@ -1,71 +1,20 @@
 # 在线部署指南（零架构改动）
 
-本项目无需任何代码修改即可在线部署：Dockerfile、HF Spaces 元数据（README 头部 `sdk: docker`）、内嵌 H2 演示数据均已就绪。
-本地已验证：`.\mvnw.cmd package -DskipTests` 构建成功，`java -jar target/ShopRecommendation-0.0.1-SNAPSHOT.jar` 启动后首页 200，460 商品 + 推荐数据正常。
+本项目无需任何代码修改即可在线部署：Dockerfile、Render Blueprint（`render.yaml`）、内嵌 H2 演示数据均已就绪。
+本地已验证：`.\mvnw.cmd package -DskipTests` 构建成功，`java -jar target/ShopRecommendation-0.0.1-SNAPSHOT.jar` 启动后首页 200，460 商品 + 40w推荐数据正常。
 
-## 方式一：Hugging Face Spaces（推荐：免费、公开、常驻）
+## 方式一：Render Blueprint（推荐：免费实例、一键部署，与 BookRecommendation demo 同平台）
 
-### 0. 一键脚本（推荐）
+> 注：Hugging Face Spaces 的 Docker 空间免费档已改为需要 PRO 订阅（创建时返回 402），弃用；原 `scripts/deploy-hf-spaces.ps1` 保留供参考。
 
-本仓库提供 `scripts/deploy-hf-spaces.ps1`，自动完成登录、创建 Space、推送代码、配置环境变量：
+1. 打开 https://dashboard.render.com → **New → Blueprint**
+2. 连接 GitHub 仓库 `White-147/ShopRecommendation` → **Apply**（仓库根目录的 `render.yaml` 自动生效）
+3. 自动创建 Web Service（`plan: free`，Docker 构建约 3~5 分钟），**`SHOP_ASSET_BASE_URL` 由 Blueprint 自动注入为服务自身域名**（商品图不会 404，无需手动配置）
+4. 构建完成得到域名 `https://shop-recommendation-xxxx.onrender.com`
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\deploy-hf-spaces.ps1 -Token hf_xxxxxxxxxxxxxxxxx
-```
+验证：首页轮播/商品图正常 → `demo / 123456` 登录 → 商品/收藏/购物车流程。
 
-执行后等待构建完成即可访问（脚本尾部会打印 Space 域名与演示账号）。以下手动步骤供排查问题或自定义时参考。
-
-### 1. 准备访问令牌
-
-1. 登录 https://huggingface.co → Settings → Access Tokens → 新建 Fine-grained token（勾选 **Write** 权限）
-2. 本机登录 CLI：
-
-```powershell
-hf auth login --token hf_xxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-### 2. 创建 Space（Docker 类型）
-
-```powershell
-hf repo create shop-recommendation --type space
-```
-
-创建完成后稍等，HF 会初始化 `https://huggingface.co/spaces/<你的用户名>/shop-recommendation` 仓库。
-
-### 3. 推送项目文件
-
-```powershell
-git clone https://huggingface.co/spaces/<你的用户名>/shop-recommendation
-cd shop-recommendation
-# 把 ShopRecommendation 项目文件复制进来（保留 Dockerfile / src / pom.xml / README.md / mvnw / .env.example 等，
-# 不要复制 .git 目录与 target/）
-git add -A
-git commit -m "deploy: ShopRecommendation"
-git push https://<你的用户名>:hf_xxxxxxxxxxxxxxxxxxxxxxxxx@huggingface.co/spaces/<你的用户名>/shop-recommendation main
-```
-
-### 4. 关键环境变量（必配！）
-
-Space 页面 → Settings → Variables and secrets → 添加变量：
-
-| 变量 | 值 | 说明 |
-|---|---|---|
-| `SHOP_ASSET_BASE_URL` | `https://<你的用户名>-shop-recommendation.hf.space/` | **必配**。Dockerfile 默认值指向已停用的 SnapDeploy 容器，不配置会导致商品图/轮播图全部 404 |
-
-其余变量不用配：H2 内嵌库默认可用（演示账号 `demo` / `123456`，460 商品、57 分类自动灌入）。
-
-### 5. 验证
-
-构建约 3~5 分钟，Space 状态变 **Running** 后访问：
-
-```
-https://<你的用户名>-shop-recommendation.hf.space/
-```
-
-确认：首页轮播与商品图正常显示 → 用 `demo / 123456` 登录 → 浏览商品/收藏/购物车流程正常。
-
-> 提示：CPU basic 免费档可用；公开 Space 需符合 HF 内容政策（本项目为课程演示系统，无问题）。
-> 部署完成后把最终 URL 发给站长，即可在个人作品集补充「在线体验」入口。
+> 免费实例说明：无流量约 15 分钟后休眠（首次访问约 30s 冷启动，属正常）；`render.yaml` 已设健康检查 `/` 与 `SHOP_JPA_SHOW_SQL=false`。
 
 ## 方式二：SnapDeploy（原容器恢复）
 
