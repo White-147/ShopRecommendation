@@ -1,0 +1,19 @@
+# Render Blueprint：ShopRecommendation（零架构改动，免费实例）
+# 使用：Render 控制台 -> New -> Blueprint -> 选择本仓库 -> Apply
+# 自动完成：构建 Docker 镜像、注入 $PORT、把商品图基地址指向本服务域名
+services:
+  - type: web
+    name: shop-recommendation
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: SHOP_ASSET_BASE_URL
+        fromService:
+          type: web
+          name: shop-recommendation
+          property: host
+      - key: SHOP_JPA_SHOW_SQL
+        value: "false"
